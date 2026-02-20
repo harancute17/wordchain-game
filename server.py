@@ -1,4 +1,6 @@
 from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
+from pathlib import Path
 from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import json, time, secrets
@@ -7,7 +9,7 @@ from typing import Dict, List, Set, Optional
 
 app = FastAPI()
 
-
+BASE_DIR= Path(__file__).resolve().parent
     
 TURN_SECONDS = 15
 
@@ -265,10 +267,6 @@ async def ws_room(ws: WebSocket, rid: str):
 
     pid = secrets.token_urlsafe(8)
   
-@app.get("/", response_class=HTMLResponse)
-def serve_index():
-    with open("index.html", "r", encoding="utf-8") as f:
-        return f.read() 
 
     try:
         # 첫 메시지 join
@@ -317,4 +315,7 @@ def serve_index():
             await system(room, f"{p.name} 연결 끊김")
         except Exception:
             pass
- 
+
+@app.get("/")
+def serve_index():
+        return FileResponse(BASE_DIR / "index.html") 

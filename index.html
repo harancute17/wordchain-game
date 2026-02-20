@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>끝말잇기</title>
+  <title>생성형AI_TEST</title>
   <style>
     body { font-family: system-ui, sans-serif; max-width: 760px; margin: 20px auto; padding: 0 12px; }
     .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
@@ -17,11 +17,11 @@
   </style>
 </head>
 <body>
-  <h1>끝말잇기 (두음법칙 적용)</h1>
+  <h1>챗봇 보이스봇 생성형 AI TEST</h1>
 
   <div class="card">
     <div class="row">
-      <input id="host" placeholder="서버주소 (예: localhost:8000)" value="localhost:8000" style="flex:1; min-width:220px;">
+      <input id="host" placeholder="서버주소 (예: localhost:8000)" value="localhost:8000" style="display:none;">
       <input id="rid" placeholder="방 코드" style="width:140px;">
       <input id="name" placeholder="닉네임" style="width:160px;">
       <button id="joinBtn">입장</button>
@@ -119,12 +119,16 @@
   }
 
   $("joinBtn").onclick = () => {
-    const host = $("host").value.trim();
+    // const host = $("host").value.trim();
+    
     const rid = $("rid").value.trim();
     const name = $("name").value.trim();
-    if (!host || !rid || !name) return alert("서버주소/방코드/닉네임을 입력해줘!");
+    if (!rid || !name) return alert("방코드/닉네임을 입력해줘!");
 
-    ws = new WebSocket(`ws://${host}/ws/${rid}`);
+    // ws = new WebSocket(`ws://${host}/ws/${rid}`);
+    const host = location.host;
+    const scheme = (location.protocol === "https:")?"wss":"ws";
+    ws = new WebSocket(`${scheme}://${host}/ws/${rid}`);
 
     ws.onopen = () => {
       ws.send(JSON.stringify({type:"join", name}));
